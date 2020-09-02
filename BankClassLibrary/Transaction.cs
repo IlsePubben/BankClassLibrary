@@ -26,7 +26,7 @@ namespace BankClassLibrary
             get { return _location; }
         }
 
-        TransactionType TypeOfTransaction;
+        TransactionType _typeOfTransaction;
 
         public string Summary
         {
@@ -39,7 +39,7 @@ namespace BankClassLibrary
 
         public string TransactionTypeString
         {
-            get { return (TypeOfTransaction == TransactionType.DEPOSIT ? "Deposit" : "Withdraw"); }
+            get { return (_typeOfTransaction == TransactionType.DEPOSIT ? "Deposit" : "Withdraw"); }
         }
 
         public string DateString
@@ -56,7 +56,7 @@ namespace BankClassLibrary
             _moneyAmount = aTransaction._moneyAmount;
             _transactionDate = aTransaction._transactionDate;
             _location = aTransaction._location;
-            TypeOfTransaction = aTransaction.TypeOfTransaction;
+            _typeOfTransaction = aTransaction._typeOfTransaction;
         }
 
         public Transaction(double aAmount, TransactionType aType)
@@ -64,7 +64,24 @@ namespace BankClassLibrary
             _moneyAmount = aAmount;
             _transactionDate = DateTime.Today;
             _location = "EARTH";
-            TypeOfTransaction = aType;
+            _typeOfTransaction = aType;
+        }
+
+        public Transaction(double aAmount, string aTransactionTypeString, DateTime aTransactionDate, string aLocation)
+        {
+            _moneyAmount = aAmount;
+            _transactionDate = aTransactionDate;
+            _location = aLocation; 
+
+            switch (aTransactionTypeString)
+            {
+                case "Deposit":
+                    _typeOfTransaction = TransactionType.DEPOSIT;
+                    break;
+                case "Withdrawel":
+                    _typeOfTransaction = TransactionType.WITHDRAWEL;
+                    break; 
+            }
         }
 
         #endregion CONSTRUCTORS

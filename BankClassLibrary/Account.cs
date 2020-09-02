@@ -23,25 +23,16 @@ namespace BankClassLibrary
         public string CustomerPhone
         {
             get { return _accountCustomer.PhoneNumber; }
-            set 
-            {
-                if (string.IsNullOrEmpty(value))
-                    _accountCustomer.PhoneNumber = EMPTY_PHONE; 
-                else
-                    _accountCustomer.PhoneNumber = value; 
-            }
         }
 
         public string CustomerAddress
         {
             get { return _accountCustomer.Address; }
-            set 
-            {
-                if (string.IsNullOrEmpty(value))
-                    _accountCustomer.Address = EMPTY_ADDRESS; 
-                else
-                    _accountCustomer.Address = value; 
-            }
+        }
+
+        public DateTime CustomerBirthDate
+        {
+            get { return _accountCustomer.DateOfBirth; }
         }
 
         private int _accountNumber;
@@ -106,10 +97,18 @@ namespace BankClassLibrary
             _currentBalance = 0; //doesn't need to be defind, is zero by default
             _transactionList = new BindingList<Transaction>(); 
         }
+
+        public Account(int accountID, string customerName, DateTime dateOfBirth, string phoneNumber = null, string address = null)
+        {
+            _accountCustomer = new Customer(customerName, dateOfBirth, phoneNumber, address);
+            _accountNumber = accountID;
+            _currentBalance = 0; //doesn't need to be defind, is zero by default
+            _transactionList = new BindingList<Transaction>();
+        }
         #endregion CONSTRUCTORS
 
         #region METHODS
-        
+
         public bool DepositMoney(double amount)
         {
             bool isSuccess = false;
@@ -132,6 +131,21 @@ namespace BankClassLibrary
             _transactionList.Add(transaction);
 
             return isSuccesful; 
+        }
+
+        public void addTransaction(Transaction newTransaction)
+        {
+            _transactionList.Add(newTransaction); 
+
+            switch (newTransaction.TransactionTypeString)
+            {
+                case "Deposit":
+                    _currentBalance += newTransaction.MoneyAmount;
+                    break;
+                case "Withdrawel":
+                    _currentBalance -= newTransaction.MoneyAmount;
+                    break; 
+            }
         }
         #endregion METHODS
     }
